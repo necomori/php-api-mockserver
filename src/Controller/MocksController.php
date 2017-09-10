@@ -16,6 +16,7 @@ namespace App\Controller;
 use App\Form\Mocks\AddForm;
 use App\Form\Mocks\DeleteForm;
 use App\Form\Mocks\EditForm;
+use App\Form\Mocks\ExecuteForm;
 use App\Form\Mocks\IndexForm;
 use App\Form\Mocks\ViewForm;
 use App\Model\Entity\Resource;
@@ -213,5 +214,47 @@ class MocksController extends AppController
                 ->withCharset('UTF-8')
                 ->withStatus(404);
         }
+    }
+
+    /**
+     * APIのモック動作を行う
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function execute()
+    {
+        $form = new ExecuteForm();
+
+        $response = $form->execute([]);
+
+        if ($response === false) {
+            $this->response = $this->response
+                ->withType('application/json')
+                ->withCharset('UTF-8')
+                ->withStatus(500);
+
+            return;
+        }
+
+        /** @var \App\ValueObject\Response $response */
+        $this->response = $this->response
+            ->withStatus($response->code)
+            ->withType('application/json')
+            ->withCharset('UTF-8');
+
+        if (!empty($response->header) && is_array($response->header)) {
+            /** @var array $header */
+            $header = $response->header;
+            foreach ($header as $key => $value) {
+                $this->response = $this->response
+                    ->withHeader($key, $value);
+            }
+        }
+
+        $this->response = $this->response
+            ->withStringBody(json_encode(
+                $response->body,
+                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
+            ));
     }
 }

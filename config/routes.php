@@ -44,7 +44,7 @@ use Cake\Routing\Router;
 Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
-    $routes->connect('/**', ['controller' => 'Resources', 'action' => 'execute']);
+    $routes->connect('/**', ['controller' => 'Mocks', 'action' => 'execute']);
 
     /**
      * Connect catchall routes for all controllers.

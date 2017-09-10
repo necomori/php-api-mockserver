@@ -21,8 +21,6 @@ use App\Controller\Traits\ViewActionTrait;
 use App\Form\AppForm;
 use App\Model\Entity\Resource;
 use App\Model\Table\ResourcesTable;
-use App\ValueObject\Request;
-use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Http\Response;
 
@@ -56,20 +54,12 @@ class ResourcesController extends AppController
     {
         parent::initialize();
 
+        $this->viewBuilder()->setLayout('AdminLTE.default');
+
         $this->loadComponent('RequestHandler');
-
-        if ($this->request->action === 'execute') {
-            Configure::write('debug', false);
-
-            $this->viewBuilder()->setLayout('');
-            $this->viewBuilder()->enableAutoLayout(false);
-            $this->autoRender = false;
-        } else {
-            $this->viewBuilder()->setLayout('AdminLTE.default');
-            $this->loadComponent('Flash');
-            $this->loadComponent('Security');
-            $this->loadComponent('Csrf');
-        }
+        $this->loadComponent('Flash');
+        $this->loadComponent('Security');
+        $this->loadComponent('Csrf');
     }
 
     /**
@@ -82,43 +72,8 @@ class ResourcesController extends AppController
     {
         parent::beforeRender($event);
 
-        if ($this->request->action !== 'execute') {
-            $this->viewBuilder()->setTheme('AdminLTE');
-            $this->viewBuilder()->setClassName('AdminLTE.AdminLTE');
-        }
-    }
-
-    /**
-     * APIのモック動作を行う
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function execute()
-    {
-        $this->loadModel('Resources');
-
-        $request = new Request();
-        $response = $this->Resources->getResponse($request);
-
-        $this->response = $this->response
-            ->withStatus($response->code)
-            ->withType('application/json')
-            ->withCharset('UTF-8');
-
-        if (!empty($response->header) && is_array($response->header)) {
-            /** @var array $header */
-            $header = $response->header;
-            foreach ($header as $key => $value) {
-                $this->response = $this->response
-                    ->withHeader($key, $value);
-            }
-        }
-
-        $this->response = $this->response
-            ->withStringBody(json_encode(
-                $response->body,
-                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
-            ));
+        $this->viewBuilder()->setTheme('AdminLTE');
+        $this->viewBuilder()->setClassName('AdminLTE.AdminLTE');
     }
 
     /**

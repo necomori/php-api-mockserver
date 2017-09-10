@@ -105,8 +105,10 @@ class ResourcesTable extends Table
     }
 
     /**
+     * 指定されてURLとMethodに対するレスポンスを返却
+     *
      * @param Request $request
-     * @return Response|null
+     * @return Response|bool
      * @throws InvalidArgumentException
      */
     public function getResponse($request)
