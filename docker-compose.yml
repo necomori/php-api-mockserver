@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: necomori/php71-cakephp3-sqlite
+    hostname: web
+    container_name: web
+    volumes:
+      - .:/var/www:cached
+    ports:
+      - "8765:80"

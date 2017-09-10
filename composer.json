@@ -1,0 +1,35 @@
+{
+  "name": "necomori/php-api-mockserver",
+  "description": "PHP API MockServer",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.6",
+    "cakephp/cakephp": "3.5.*",
+    "mobiledetect/mobiledetectlib": "2.*",
+    "cakephp/migrations": "~1.0",
+    "cakephp/plugin-installer": "~1.0",
+    "josegonzalez/dotenv": "2.*",
+    "maiconpinto/cakephp-adminlte-theme": "1.*"
+  },
+  "require-dev": {
+    "psy/psysh": "@stable",
+    "cakephp/debug_kit": "~3.2",
+    "cakephp/bake": "~1.1",
+    "phpunit/phpunit": "^5.7|^6.0",
+    "cakephp/cakephp-codesniffer": "^3.0",
+    "fzaninotto/faker": "^1.7",
+    "dereuromark/cakephp-ide-helper": "0.9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Test\\": "tests",
+      "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+    }
+  }
+}
